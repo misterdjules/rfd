@@ -271,7 +271,7 @@ restify servers such that:
 
 ## Planned Implementation
 
-The implementation of this work will consist of 3 parts:
+The implementation of this work will consist of several parts:
 
 1. modifications to restify-client to support .child()
 2. modifications to node-sdc-clients to support .child()
@@ -287,8 +287,12 @@ We will add a `.child()` method to restify clients. This will be called as:
 
 ```
 client.child({
-    after: \<function\>,
-    before: \<function\>
+    after: function onAfter() {
+      // code that runs after a response is received
+    },
+    before: function onBefore() {
+      // code that runs before anything is sent to the server
+    }
 })
 ```
 
@@ -304,9 +308,9 @@ callback(err, opts, req, res);
 and this callback will be called *before* the callback within restify for the
 `.write()` or `.read()` method (depending on the type of query).
 
-If a "before" function is passed, this will be called at the beginning of the
-.write() or .read() method in the restify client, before anything is sent to the
-server. It will be called with the following parameters:
+If a `before` function is passed, this will be called at the beginning of the
+`.write()` or `.read()` method in the restify client, before anything is sent to
+the server. It will be called with the following parameters:
 
 ```
 callback(err, opts, req, body);
